@@ -1,112 +1,267 @@
 <html>
-	<head>
-		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=default'></script>
-		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-		<style>
-			h1 {
-				text-align: center;
-			}
+    <head>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=default'></script>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+        <style>
+            h1 {
+                text-align: center;
+                color: #2c3e50;
+            }
+            h2 {
+                color: #34495e;
+                border-bottom: 2px solid #ecf0f1;
+                padding-bottom: 5px;
+                margin-top: 40px;
+            }
+            h3 {
+                color: #2980b9;
+            }
+            .container {
+                margin: 0 auto;
+                padding: 60px 20%;
+                line-height: 1.6;
+                color: #333;
+            }
+            figure {
+                text-align: center;
+                margin: 30px 0;
+            }
+            figcaption {
+                margin-top: 10px;
+                color: #7f8c8d;
+                font-size: 0.9em;
+            }
+            img {
+                display: inline-block;
+                max-width: 100%;
+                border-radius: 8px;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+            }
+            body {
+                font-family: 'Inter', sans-serif;
+                background-color: #fcfcfc;
+            }
+            code {
+                background-color: #f4f4f4;
+                padding: 2px 6px;
+                border-radius: 4px;
+                font-family: monospace;
+                font-size: 0.9em;
+                color: #c0392b;
+            }
+            /* Updated style for image placeholders */
+            .image-placeholder {
+                background-color: #f0f2f5;
+                border: none;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+                padding: 40px;
+                text-align: center;
+                color: #95a5a6;
+                font-weight: 500;
+                margin: 15px 0;
+                border-radius: 12px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 150px; /* Ensure a minimum height for a clean look */
+            }
+            table {
+                width: 100%;
+                text-align: center;
+                border-collapse: separate;
+                border-spacing: 20px 0; /* Add spacing between table cells */
+            }
+            td {
+                vertical-align: top;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+        <h1>CS184 Spring 2026 Homework 1 Write-Up</h1>
+        <div style="text-align: center;">Name: <i>Noah Math</i></div>
 
-			.container {
-				margin: 0 auto;
-				padding: 60px 20%;
-			}
+        <br>
 
-			figure {
-				text-align: center;
-			}
+        <div style="text-align: center;">
+            Link to webpage: <a href="#">your-webpage-link.com</a><br>
+            Link to GitHub repository: <a href="#">your-github-repo-link.com</a>
+        </div>
 
-			img {
-				display: inline-block;
-			}
+        <h2>Overview</h2>
+        <p>In this homework, I implemented a software rasterizer from scratch. The pipeline takes raw 2D vector graphics (SVG files) and converts them into an array of pixels on the screen. The project evolved in stages: beginning with basic triangle drawing and matrix transformations, progressing to supersampling for spatial anti-aliasing, and culminating in a full texture mapping engine that supports barycentric coordinate interpolation, bilinear pixel filtering, and trilinear mipmap level sampling.</p>
+        <p>The most interesting takeaway from this project was seeing how purely mathematical concepts—like taking the 2D cross product of edges or calculating the rate of change of coordinate differentials—directly translate into beautiful, smooth visuals and eliminate harsh digital artifacts.</p>
 
-			body {
-				font-family: 'Inter', sans-serif;
-			}
-		</style>
-	</head>
-	<body>
-		<div class="container">
-		<h1>CS184/284A Spring 2025 Homework 1 Write-Up</h1>
-		<div style="text-align: center;">Names: </div>
+        <h2>Task 1: Drawing Single-Color Triangles</h2>
+        <p>To rasterize a triangle, the algorithm must determine which screen pixels fall strictly inside the mathematical boundary of the triangle's three vertices. My implementation takes the following approach:</p>
+        <ul>
+            <li><b>Bounding Box:</b> To optimize performance, I calculate the minimum and maximum X and Y coordinates among the three vertices. The algorithm only iterates over pixels within this localized box rather than the entire screen.</li>
+            <li><b>Point-in-Triangle Test:</b> For each pixel in the bounding box, I sample its exact center by adding <code>0.5</code> to its integer coordinates. I then use the 2D Cross Product (Edge Equation) test against all three directed edges of the triangle. </li>
+            <li><b>Winding Order:</b> A point is considered "inside" if it lies on the same side of all three edges. To ensure triangles render correctly regardless of whether their vertices were defined in clockwise or counter-clockwise order, my code checks if the edge test results are <i>all non-negative</i> or <i>all non-positive</i>.</li>
+        </ul>
 
-		<br>
-
-		Link to webpage: (TODO) <a href="https://cs184.eecs.berkeley.edu/sp25">cs184.eecs.berkeley.edu/sp25</a>
-		
-		<br>
-
-		Link to GitHub repository: (TODO) <a href="https://cs184.eecs.berkeley.edu/sp25">cs184.eecs.berkeley.edu/sp25</a>
-
-		<figure>
-			<img src="lion.jpg" alt="Lion" style="width:50%"/>
-			<figcaption>You can add images with captions!</figcaption>
-		</figure>
-
-		<!--
-		We've already added one heading per task, to make your write-up as navigable when grading. Please fit your write-up within these sections!
-		-->
-
-		<h2>Overview</h2>
-		Give a high-level overview of what you implemented in this homework. Think about what you've built as a whole. Share your thoughts on what interesting things you've learned from completing the homework.
-
-		<h2>Task 1: Drawing Single-Color Triangles</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-		<p>Here is an example 2x2 gridlike structure using an HTML table. Each <b>tr</b> is a row and each <b>td</b> is a column in that row. You might find this useful for framing and showing your result images in an organized fashion.</p>
-		<div style="display: flex; flex-direction: column; align-items: center;">
-			<table style="width: 100%; text-align: center; border-collapse: collapse;">
-			  <tr>
-				<td style="text-align: center;">
-				  <img src="lion.jpg" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
-				</td>
-				<td style="text-align: center;">
-				  <img src="lion.jpg" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
-				</td>
-			  </tr>
-			  <tr>
-				<td style="text-align: center;">
-				  <img src="lion.jpg" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
-				</td>
-				<td style="text-align: center;">
-				  <img src="lion.jpg" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
-				</td>
-			  </tr>
-			</table>
+        <div class="image-placeholder">
+    		<img src="task1.png" alt="Basic rasterization demonstration" style="max-width: 100%; height: auto;">
 		</div>
-		
-		<h2>Task 2: Antialiasing by Supersampling</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        
+        <h2>Task 2: Antialiasing by Supersampling</h2>
+        <h3>Algorithm and Data Structures</h3>
+        <p>To implement supersampling, I conceptually expanded the internal resolution of the rasterizer. The primary data structure is a 1D vector called <code>sample_buffer</code>. Instead of allocating one color per screen pixel, the buffer is dynamically resized to hold <code>width * height * sample_rate</code> colors.</p>
+        <p>During rasterization, I divide each screen pixel into a \( \sqrt{\text{sample\_rate}} \times \sqrt{\text{sample\_rate}} \) sub-grid. The point-in-triangle test is executed for the center of every <i>sub-pixel</i>. Finally, in the <code>resolve_to_framebuffer()</code> step, the pipeline averages the colors of all sub-pixels corresponding to a single screen pixel before pushing the final 8-bit RGB value to the display. </p>
 
-		<h2>Task 3: Transforms</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        <h3>Why Supersampling is Useful</h3>
+        <p>Supersampling is a spatial anti-aliasing technique that reduces high-frequency "jaggies" (staircase artifacts). Because standard rasterization forces a pixel to be strictly 100% inside or 100% outside a shape, diagonal edges look harsh. Supersampling averages the coverage, effectively blurring the edge to create smooth visual transitions.</p>
 
-		<h2>Task 4: Barycentric coordinates</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        <h3>Pipeline Modifications</h3>
+        <ul>
+            <li><b>Memory Management:</b> Updated buffer resizing functions to scale dynamically with the <code>sample_rate</code>.</li>
+            <li><b>Rasterization:</b> Added nested loops to calculate fractional coordinates and sample sub-pixel centers.</li>
+            <li><b>Resolving:</b> Rewrote the framebuffer resolution to average the values of the high-resolution buffer into standard RGB.</li>
+            <li><b>Primitives:</b> Modified <code>fill_pixel()</code> to write the same color to <i>all</i> sub-pixels of a coordinate so points and lines do not become transparent during the averaging phase.</li>
+        </ul>
 
-		<h2>Task 5: "Pixel sampling" for texture mapping</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        <h3>Effects of Different Sample Rates</h3>
+        <p>As the sample rate increases, sharp corners and edges gain access to more intermediate blending colors. At a sample rate of 1, a boundary pixel has 0% or 100% coverage. At a sample rate of 16 (a 4x4 grid), a boundary pixel can have 17 different gradient states. This allows sharp corners to gracefully fade into the background rather than being abruptly truncated.</p>
 
-		<h2>Task 6: "Level Sampling" with mipmaps for texture mapping</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        <div style="display: flex; flex-direction: column; align-items: center;">
+            <table style="width: 100%; text-align: center; border-collapse: collapse;">
+              <tr>
+                <td style="text-align: center; padding: 10px;">
+                  <div class="image-placeholder" style="padding: 20px;"><img src="task2_1.png" alt="Basic rasterization demonstration" style="max-width: 100%; height: auto;"></div>
+                  <figcaption>Sample Rate 1: Noticeable jaggies.</figcaption>
+                </td>
+                <td style="text-align: center; padding: 10px;">
+                  <div class="image-placeholder" style="padding: 20px;"><img src="task2_2.png" alt="Basic rasterization demonstration" style="max-width: 100%; height: auto;"></div>
+                  <figcaption>Sample Rate 4: Smoother edges.</figcaption>
+                </td>
+              </tr>
+              <tr>
+                <td style="text-align: center; padding: 10px;" colspan="2">
+                  <div class="image-placeholder" style="padding: 20px;"><img src="task2_3.png" alt="Basic rasterization demonstration" style="max-width: 100%; height: auto;"></div>
+                  <figcaption>Sample Rate 16: Highly accurate, soft corners.</figcaption>
+                </td>
+              </tr>
+            </table>
+        </div>
 
-		<h2>(Optional) Task 7: Extra Credit - Draw Something Creative!</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        <h2>Task 3: Transforms</h2>
+        <p>I implemented 2D geometric transformations using homogeneous coordinates and 3x3 matrices. This mathematical approach allows translation, scaling, and rotation to all be represented as matrix multiplications, making it easy to chain operations together.</p>
+        <p>For my updated <code>my_robot.svg</code>, I altered the cubeman's proportions and colors to feature a blue torso, yellow head, and green limbs. To make him wave, I used <b>hierarchical transforms</b>. By grouping the right arm and applying an upward rotation at the shoulder, the entire arm pivoted. I then nested a second group for the lower arm with an additional local rotation. Because it was a child element, it inherited the shoulder's rotation and added its own to successfully bend the elbow!</p>
 
-		<h2>Additional Notes (please remove)</h2>
-		<ul>
-			<li>You can also add code if you'd like as so: <code>code code code</code></li>
-			<li>If you'd like to add math equations, 
-				<ul>
-					<li>You can write inline equations like so: \( a^2 + b^2 = c^2 \)</li>
-					<li>You can write display equations like so: \[ a^2 + b^2 = c^2 \]</li>
-				</ul>
-			</li>
-		</ul>
-		</div>
-	</body>
+        <figure>
+            <div class="image-placeholder"><img src="task3.png" alt="Basic rasterization demonstration" style="max-width: 100%; height: auto;"></div>
+            <figcaption>The waving robot, utilizing hierarchical rotations.</figcaption>
+        </figure>
+
+        <h2>Task 4: Barycentric Coordinates</h2>
+        <p>Barycentric coordinates are a triangle-specific coordinate system that allows us to express any point as a weighted combination of the triangle's three vertices. For any point \( P \), its location can be defined by three scalar weights: \( \alpha, \beta, \gamma \).</p>
+        <p>\[ P = \alpha V_0 + \beta V_1 + \gamma V_2 \]</p>
+        <p>These weights represent the point's proportional distance from the edges opposite to each vertex. If a point is inside the triangle, all three weights are positive and sum exactly to 1. </p>
+        <p>We use barycentric coordinates in rasterization to smoothly interpolate attributes defined at the vertices across the surface of the triangle. For example, if we assign Red, Green, and Blue to the three corners, multiplying those colors by the barycentric weights at each pixel creates a perfectly smooth color gradient.</p>
+
+        <div style="display: flex; flex-direction: column; align-items: center;">
+            <table style="width: 100%; text-align: center; border-collapse: collapse;">
+              <tr>
+                <td style="text-align: center; padding: 10px;">
+                  <div class="image-placeholder" style="padding: 20px;"><img src="task4_1.png" alt="Basic rasterization demonstration" style="max-width: 100%; height: auto;"></div>
+                  <figcaption>Default Color Wheel</figcaption>
+                </td>
+                <td style="text-align: center; padding: 10px;">
+                  <div class="image-placeholder" style="padding: 20px;"><img src="task4_2.png" alt="Basic rasterization demonstration" style="max-width: 100%; height: auto;"></div>
+                  <figcaption>Single Triangle Color Interpolation</figcaption>
+                </td>
+              </tr>
+            </table>
+        </div>
+
+        <h2>Task 5: "Pixel Sampling" for Texture Mapping</h2>
+        <p>Texture mapping involves applying a 2D image (texture) onto screen geometry. Because screen pixels rarely align 1:1 with texture pixels (texels), we use <b>pixel sampling</b> to determine what color a screen pixel should adopt based on its interpolated \( (U, V) \) coordinate.</p>
+        
+        <h3>Nearest vs. Bilinear Sampling</h3>
+        <ul>
+            <li><b>Nearest Sampling:</b> Scales the \( (U, V) \) coordinate by the texture resolution and rounds to the nearest integer, fetching that single texel's color. It is computationally fast but creates harsh, blocky artifacts when the image is magnified.</li>
+            <li><b>Bilinear Sampling:</b> Fetches the <i>four</i> closest texels to the continuous coordinate and performs a 2D linear interpolation based on the fractional distance from the texel centers. This actively creates new intermediate colors, smoothing out blocky textures. </li>
+        </ul>
+
+        <h3>Comparisons and Tradeoffs</h3>
+        <p>The differences are massive under magnification. Nearest sampling produces completely unreadable, jagged blocks. Bilinear sampling blends these boundaries into soft edges. When combined with 16x supersampling, the texture maintains its smooth interior (via bilinear) while the geometric edges of the actual SVG triangles are softened (via supersampling).</p>
+
+        <div style="display: flex; flex-direction: column; align-items: center;">
+            <table style="width: 100%; text-align: center; border-collapse: collapse;">
+              <tr>
+                <td style="text-align: center; padding: 10px;">
+                  <div class="image-placeholder" style="padding: 20px;"><img src="task5nearest1.png" alt="Basic rasterization demonstration" style="max-width: 100%; height: auto;"></div>
+                  <figcaption>Nearest - 1 sample per pixel</figcaption>
+                </td>
+                <td style="text-align: center; padding: 10px;">
+                  <div class="image-placeholder" style="padding: 20px;"><img src="task5bilinear1.png" alt="Basic rasterization demonstration" style="max-width: 100%; height: auto;"></div>
+                  <figcaption>Bilinear - 1 sample per pixel</figcaption>
+                </td>
+              </tr>
+              <tr>
+                <td style="text-align: center; padding: 10px;">
+                  <div class="image-placeholder" style="padding: 20px;"><img src="task5nearest16.png" alt="Basic rasterization demonstration" style="max-width: 100%; height: auto;"></div>
+                  <figcaption>Nearest - 16 samples per pixel</figcaption>
+                </td>
+                <td style="text-align: center; padding: 10px;">
+                  <div class="image-placeholder" style="padding: 20px;"><img src="task5bilinear16.png" alt="Basic rasterization demonstration" style="max-width: 100%; height: auto;"></div>
+                  <figcaption>Bilinear - 16 samples per pixel</figcaption>
+                </td>
+              </tr>
+            </table>
+        </div>
+
+        <h2>Task 6: "Level Sampling" with Mipmaps for Texture Mapping</h2>
+        <p>Level sampling (mipmapping) solves the opposite problem of magnification: <b>minification</b>. When a high-resolution texture is mapped to a small area on the screen, attempting to sample it directly causes severe aliasing and moiré patterns because multiple texels are compressed into a single screen pixel.</p>
+        <p>I implemented this by calculating the barycentric coordinates for adjacent pixels \( (x+1, y) \) and \( (x, y+1) \) to find the differential rate of change in the texture. By scaling these differentials, I determined the maximum span length \( L \). The ideal mipmap level is then computed continuously as \( \log_2(L) \). </p>
+
+        <h3>Tradeoffs: Speed, Memory, and Antialiasing</h3>
+        <ul>
+            <li><b>Pixel Sampling (Nearest vs Bilinear):</b> Nearest is extremely fast (1 memory fetch). Bilinear is slower (4 fetches, 3 lerps) but heavily reduces blocky artifacts during magnification. Memory cost is the same for both.</li>
+            <li><b>Level Sampling (L_ZERO, L_NEAREST, L_LINEAR):</b> <code>L_ZERO</code> is fast and requires no extra memory, but looks terrible on minified geometry. Mipmaps (<code>L_NEAREST</code> and <code>L_LINEAR</code>) increase total texture memory footprint by ~33%. <code>L_LINEAR</code> (Trilinear filtering) is the slowest as it interpolates between two separate texture levels, but it provides the ultimate anti-aliasing power for receding textures by eliminating level-transition seams.</li>
+            <li><b>Number of Samples (Supersampling):</b> Extremely expensive in both memory (scales linearly, e.g., 16x buffer size) and computation (rasterizing 16x as many points). However, it is the <i>only</i> method that smooths geometric edges.</li>
+        </ul>
+
+        <div style="display: flex; flex-direction: column; align-items: center;">
+            <table style="width: 100%; text-align: center; border-collapse: collapse;">
+              <tr>
+                <td style="text-align: center; padding: 10px;">
+                  <div class="image-placeholder" style="padding: 20px;"><img src="task6zeronearest.png" alt="Basic rasterization demonstration" style="max-width: 100%; height: auto;"></div>
+                  <figcaption>L_ZERO and P_NEAREST</figcaption>
+                </td>
+                <td style="text-align: center; padding: 10px;">
+                  <div class="image-placeholder" style="padding: 20px;"><img src="task6zerolinear.png" alt="Basic rasterization demonstration" style="max-width: 100%; height: auto;"></div>
+                  <figcaption>L_ZERO and P_LINEAR</figcaption>
+                </td>
+              </tr>
+              <tr>
+                <td style="text-align: center; padding: 10px;">
+                  <div class="image-placeholder" style="padding: 20px;"><img src="task6nearestnearest.png" alt="Basic rasterization demonstration" style="max-width: 100%; height: auto;"></div>
+                  <figcaption>L_NEAREST and P_NEAREST</figcaption>
+                </td>
+                <td style="text-align: center; padding: 10px;">
+                  <div class="image-placeholder" style="padding: 20px;"><img src="task6nearestlinear.png" alt="Basic rasterization demonstration" style="max-width: 100%; height: auto;"></div>
+                  <figcaption>L_NEAREST and P_LINEAR</figcaption>
+                </td>
+              </tr>
+            </table>
+        </div>
+
+        <h2>(Optional) Task 7: Extra Credit - Viewport Rotation</h2>
+        <p>I added an interactive feature to the GUI by mapping the <b>Q</b> and <b>E</b> keys to rotate the viewport counter-clockwise and clockwise. This was implemented by manipulating the NDC to screen-space matrix stack (<code>ndc_to_screen</code>) inside <code>keyboard_event</code>.</p>
+        <p>To ensure the viewport rotated around the <i>center</i> of the screen rather than orbiting around the top-left origin, I composed three matrix transformations:</p>
+        <ol>
+            <li>Translated the viewport negatively by half the width and height.</li>
+            <li>Applied the mathematical rotation matrix.</li>
+            <li>Translated the viewport positively back to its original center.</li>
+        </ol>
+        <p>Because this was applied to <code>ndc_to_screen</code> rather than <code>svg_to_ndc</code>, the rotation remains perfectly persistent independently of the mouse pan and zoom state.</p>
+
+        <figure>
+            <div class="image-placeholder"><img src="extracredit.png" alt="Basic rasterization demonstration" style="max-width: 100%; height: auto;"></div>
+            <figcaption>The GUI canvas successfully rotated independently of the SVG mapping.</figcaption>
+        </figure>
+
+        </div>
+    </body>
 </html>
