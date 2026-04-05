@@ -145,7 +145,34 @@
             margin: 20px 0;
             border-radius: 0 8px 8px 0;
         }
+        @media print {
+            /* 1. Disable the grid layout entirely during printing */
+            .image-grid {
+                display: block !important;
+            }
 
+            /* 2. Use the inline-block hack to force WebKit to respect page breaks */
+            .image-card, .highlight-box {
+                display: inline-block !important; 
+                width: 100% !important; 
+                margin-bottom: 30px !important;
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+                -webkit-column-break-inside: avoid !important; /* Legacy Safari support */
+            }
+
+            img, figure {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+            }
+
+            /* Optional: Force each main section to start on a new page for a cleaner PDF */
+            h2 {
+                page-break-before: always !important;
+                break-before: page !important;
+                margin-top: 0 !important;
+            }
+        }
     </style>
 </head>
 <body>

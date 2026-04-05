@@ -1,106 +1,530 @@
+<!DOCTYPE html>
 <html>
-	<head>
-		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=default'></script>
-		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-		<style>
-			h1 {
-				text-align: center;
-			}
+    <head>
+        <script>
+            MathJax = {
+                tex: {
+                    inlineMath: [['$', '$']],
+                    displayMath: [['$$', '$$']]
+                }
+            };
+        </script>
+        <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+        <style>
+            body {
+                font-family: 'Inter', sans-serif;
+                line-height: 1.6;
+                color: #333;
+                background-color: #f9f9f9;
+            }
 
-			.container {
-				margin: 0 auto;
-				padding: 60px 20%;
-			}
+            h1, h2, h3 {
+                color: #222;
+            }
 
-			figure {
-				text-align: center;
-			}
+            h1 {
+                text-align: center;
+                margin-bottom: 10px;
+                font-size: 2.5em;
+            }
 
-			img {
-				display: inline-block;
-			}
+            h2 {
+                border-bottom: 3px solid #333;
+                padding-bottom: 8px;
+                margin-top: 60px;
+                font-size: 1.8em;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+            }
 
-			body {
-				font-family: 'Inter', sans-serif;
-			}
-		</style>
-	</head>
-	<body>
-		<div class="container">
-		<h1>CS184/284A Spring 2025 Homework 3 Write-Up</h1>
-		<div style="text-align: center;">Names: </div>
+            h3 {
+                background-color: #eef2f5;
+                border-left: 5px solid #005A9C;
+                padding: 12px 20px;
+                margin-top: 50px;
+                margin-bottom: 20px;
+                border-radius: 0 4px 4px 0;
+                font-size: 1.3em;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            }
 
-		<br>
+            .container {
+                margin: 0 auto;
+                padding: 60px 15%;
+                background-color: #fff;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+                border-radius: 8px;
+            }
 
-		Link to webpage: (TODO) <a href="https://cs184.eecs.berkeley.edu/sp25">cs184.eecs.berkeley.edu/sp25</a>
-		Link to GitHub repository: (TODO) <a href="https://cs184.eecs.berkeley.edu/sp25">cs184.eecs.berkeley.edu/sp25</a>
-		
-		<figure>
-			<img src="cornell.png" alt="Cornell Boxes with Bunnies" style="width:70%"/>
-			<figcaption>You can add images with captions!</figcaption>
-		</figure>
+            figure {
+                text-align: center;
+                margin: 30px 0;
+            }
 
-		<!--
-		We've already added one heading per part, to make your write-up as navigable when grading. Please fit your write-up within these sections!
-		-->
+            img {
+                display: inline-block;
+                max-width: 100%;
+                border-radius: 6px;
+                box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+            }
 
-		<h2>Overview</h2>
-		Give a high-level overview of what you implemented in this homework. Think about what you've built as a whole. Share your thoughts on what interesting things you've learned from completing the homework.
+            figcaption {
+                font-size: 0.9em;
+                color: #666;
+                margin-top: 10px;
+                font-style: italic;
+            }
 
-		<h2>Part 1: Ray Generation and Scene Intersection</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            code {
+                background-color: #f4f4f4;
+                padding: 2px 4px;
+                border-radius: 3px;
+                font-family: monospace;
+                font-size: 0.9em;
+                color: #d63384;
+            }
 
-		<p>Here is an example 2x2 gridlike structure using an HTML table. Each <b>tr</b> is a row and each <b>td</b> is a column in that row. You might find this useful for framing and showing your result images in an organized fashion.</p>
-		<div style="display: flex; flex-direction: column; align-items: center;">
-			<table style="width: 100%; text-align: center; border-collapse: collapse;">
-			  <tr>
-				<td style="text-align: center;">
-				  <img src="cornell.png" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
-				</td>
-				<td style="text-align: center;">
-				  <img src="cornell.png" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
-				</td>
-			  </tr>
-			  <tr>
-				<td style="text-align: center;">
-				  <img src="cornell.png" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
-				</td>
-				<td style="text-align: center;">
-				  <img src="cornell.png" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
-				</td>
-			  </tr>
-			</table>
-		</div>
-		
-		<h2>Part 2: Bounding Volume Hierarchy</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            .math-block {
+                background-color: #fcfcfc;
+                border: 1px solid #eaeaea;
+                padding: 15px;
+                border-radius: 6px;
+                margin: 20px 0;
+                overflow-x: auto;
+            }
 
-		<h2>Part 3: Direct Illumination</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            .image-grid {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                margin: 40px 0;
+            }
 
-		<h2>Part 4: Global Illumination</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            .image-grid table {
+                width: 100%;
+                text-align: center;
+                border-collapse: separate;
+                border-spacing: 20px;
+            }
 
-		<h2>Part 5: Adaptive Sampling</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            .image-grid td {
+                vertical-align: top;
+                background-color: #fafafa;
+                padding: 15px;
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            }
 
-		<h2>(Optional) Part 6: Extra Credit Opportunities</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-		
-		<h2>Additional Notes (please remove)</h2>
-		<ul>
-			<li>You can also add code if you'd like as so: <code>code code code</code></li>
-			<li>If you'd like to add math equations, 
-				<ul>
-					<li>You can write inline equations like so: \( a^2 + b^2 = c^2 \)</li>
-					<li>You can write display equations like so: \[ a^2 + b^2 = c^2 \]</li>
-				</ul>
-			</li>
-		</ul>
-		</div>
-	</body>
+            .header-info {
+                text-align: center;
+                background-color: #f4f7f9;
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 40px;
+            }
+            
+            .header-info a {
+                color: #005A9C;
+                text-decoration: none;
+                font-weight: 600;
+            }
+
+            .header-info a:hover {
+                text-decoration: underline;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+        <h1>CS184 Spring 2026 Homework 3 Write-Up</h1>
+        
+        <div class="header-info">
+            <p><strong>Name:</strong> Noah Math</p>
+            <p><strong>Webpage:</strong> <a href="https://cal-cs184-student.github.io/hw-webpages-D0ctorB">cal-cs184-student.github.io/hw-webpages-D0ctorB</a></p>
+            <p><strong>GitHub:</strong> <a href="https://github.com/cal-cs184-student/hw-webpages-D0ctorB">github.com/cal-cs184-student/hw-webpages-D0ctorB</a></p>
+        </div>
+        
+        <h2>Overview</h2>
+        <p>In this assignment, I implemented a physically-based renderer using a Monte Carlo pathtracing algorithm. I started with camera ray generation and analytic intersection algorithms for triangles and spheres, using this to create a Bounding Volume Hierarchy to lower rendering times from linear to logarithmic complexity.</p>
+        <p>Ater intersections, I introduced realistic shading with direct lighting computations and compared uniform hemisphere sampling against the more efficient importance sampling. I then expanded the renderer to support full global illumination by recursively evaluating the rendering equation for multi-bounce indirect lighting and used Russian Roulette for unbiased path termination. In the final part, I implemented adaptive sampling to concentrate computational effort on high-variance regions of the image, vastly improving rendering efficiency in complex scenes.</p>
+
+        <h2>Part 1: Ray Generation and Scene Intersection</h2>
+        
+        <h3>Ray Generation and Primitive Intersection Pipeline</h3>
+        
+        <p>The rendering pipeline begins by generating viewing rays for each pixel. Given unnormalized image coordinates $(x, y)$, the coordinates are first normalized and mapped to a virtual sensor plane located at $Z = -1$ in the camera's local coordinate system. The camera sensor coordinates $(X_c, Y_c)$ are determined by the field-of-view angles:</p>
+        
+        <div class="math-block">
+            $$X_c = (2x - 1) \tan\left(\frac{\text{hFov}}{2}\right)$$
+            $$Y_c = (2y - 1) \tan\left(\frac{\text{vFov}}{2}\right)$$
+        </div>
+
+        <p>In order to implement anti-aliasing, multiple sub-pixel samples are drawn randomly. This local directional vector is transformed into world space using the camera-to-world rotation matrix (<code>c2w</code>). A <code>Ray</code> object is constructed originating at the camera's world position and cast into the scene.</p>
+        <p>As the ray traverses the scene, it tests for collisions against primitives. The ray's intersection interval is defined by <code>min_t</code> and <code>max_t</code>. Each valid intersection updates <code>max_t</code> to the new hit time, so subsequent tests only register closer objects. On a confirmed hit, the surface normal and BSDF material properties are used for shading calculations.</p>
+
+        <h3>Triangle Intersection Algorithm</h3>
+        
+        <p>I handled triangle intersection via the Möller-Trumbore algorithm which computes the intersection time $t$ and barycentric coordinates $(b_1, b_2)$ simultaneously by solving a linear system using Cramer's rule. This bypasses the need to explicitly compute the plane equation.</p>
+        
+        <div class="math-block">
+            $$ \begin{bmatrix} t \\ b_1 \\ b_2 \end{bmatrix} = \frac{1}{\mathbf{S_1} \cdot \mathbf{E_1}} \begin{bmatrix} \mathbf{S_2} \cdot \mathbf{E_2} \\ \mathbf{S_1} \cdot \mathbf{S} \\ \mathbf{S_2} \cdot \mathbf{D} \end{bmatrix} $$
+        </div>
+
+        <p>Where $\mathbf{E_1}$ and $\mathbf{E_2}$ are edge vectors, $\mathbf{S}$ is the translation vector from the vertex to the ray origin, and $\mathbf{D}$ is the ray direction. If the scalar divisor $\mathbf{S_1} \cdot \mathbf{E_1}$ is zero, the ray is parallel to the triangle. The intersection is rejected if $t$ falls outside the ray's valid <code>min_t</code> and <code>max_t</code> bounds, or if the barycentric coordinates fall outside the range $[0, 1]$ (or their sum exceeds 1). If valid, the exact normal is derived by interpolating the three vertex normals.</p>
+
+        <h3>Rendered Images (Normal Shading)</h3>
+        <div class="image-grid">
+            <table>
+                <tr>
+                    <td>
+                        <img src="part1_1.png" alt="CBspheres Normal" />
+                        <figcaption>CBspheres_lambertian.dae</figcaption>
+                    </td>
+                    <td>
+                        <img src="part1_2.png" alt="CBempty Normal" />
+                        <figcaption>CBempty.dae</figcaption>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="text-align: center; background-color: transparent; box-shadow: none;">
+                        <div style="background-color: #fafafa; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: inline-block; width: 50%;">
+                            <img src="part1_3.png" alt="CBgems Normal" />
+                            <figcaption>CBgems.dae</figcaption>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        
+        <h2>Part 2: Bounding Volume Hierarchy</h2>
+        
+        <h3>BVH Construction and My Splitting Heuristic</h3>
+        
+        <p>I constructed the BVH using a recursive spatial partitioning algorithm. For a given set of primitives, a single bounding box encompassing all primitives is computed as well as a secondary bounding box strictly containing the centroids of those primitives. If the primitive count is less than or equal to <code>max_leaf_size</code>, recursion terminates and a leaf node is created.</p>
+        <p>In internal nodes, the splitting heuristic relies on the <b>longest axis of the centroid bounding box</b>. The algorithm calculates the midpoint along this axis and uses <code>std::partition</code> to divide the primitives into "left" and "right" subsets based on whether a primitive's centroid falls below or above this midpoint. Through this heuristic the tree is balanced spatially. An edge case handler splits the array precisely in half if all centroids lie exactly on the split point to prevent infinite recursion.</p>
+
+        <h3>Large .dae Files Rendered with BVH</h3>
+        <div class="image-grid">
+            <table>
+                <tr>
+                    <td>
+                        <img src="part2_1.png" alt="Cow" />
+                        <figcaption>cow.dae</figcaption>
+                    </td>
+                    <td>
+                        <img src="part2_2.png" alt="Max Planck" />
+                        <figcaption>maxplanck.dae</figcaption>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="text-align: center; background-color: transparent; box-shadow: none;">
+                        <div style="background-color: #fafafa; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: inline-block; width: 50%;">
+                            <img src="part2_3.png" alt="CBlucy" />
+                            <figcaption>CBlucy.dae</figcaption>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <h3>Performance Analysis</h3>
+        <p>Without BVH acceleration, ray intersection operates at $O(n)$ complexity and scales linearly with the scene's primitive count. Rendering the <code>cow.dae</code> scene required approximately 40 seconds. By implementing the BVH, the complexity drops to $O(\log n)$ because the algorithm quickly prunes massive sections of unhit geometry via Axis-Aligned Bounding Box (AABB) intersection tests. With the BVH enabled, <code>cow.dae</code> rendered in roughly 0.17 seconds. Scenes like <code>CBlucy.dae</code> of hundreds of thousands of triangles went from taking hours to completing in under 2 seconds.</p>
+
+        <h2>Part 3: Direct Illumination</h2>
+
+        <h3>Implementations of Direct Lighting</h3>
+        
+        <p>The general reflection equation we approximate is:</p>
+        <div class="math-block">
+            $$ L_{out}(p, \omega_{out}) = \int_{H^2} L_{in}(p, \omega_{in}) f_r(p, \omega_{in}, \omega_{out}) \cos\theta_i \, d\omega_{in} $$
+        </div>
+
+        <p><b>Uniform Hemisphere Sampling:</b> This approach estimates direct lighting by generating random rays distributed uniformly across the hemisphere positioned directly over the intersection point. If a sampled ray hits an emissive object, its radiance is accumulated using the Monte Carlo estimator:</p>
+        
+        <div class="math-block">
+            $$ L_{out} \approx \frac{1}{N} \sum_{i=1}^N \frac{L_{in} f_r \cos\theta_i}{1 / 2\pi} $$
+        </div>
+        
+        <p>Because many sample rays hit empty space or non-emissive walls, this method requires a massive number of samples to converge and naturally produces a large amount of noise.</p>
+        
+        <p><b>Importance Sampling (Light Sampling):</b> This method directly samples the light sources in the scene. For each light, it draws a sample direction pointing from the hit point directly to the light. A shadow ray is then cast. If the ray reaches the light without hitting obstructing geometry, the unoccluded light's radiance is accumulated via the reflection equation and weighted by the specific probability density function $p(\omega_i)$ provided by the light.</p>
+        
+        <div class="math-block">
+            $$ L_{out} \approx \frac{1}{N} \sum_{i=1}^N \frac{L_{in} f_r \cos\theta_i}{p(\omega_i)} $$
+        </div>
+
+        <h3>Direct Lighting Comparison Images</h3>
+        <div class="image-grid">
+            <table>
+                <tr>
+                    <td>
+                        <img src="part3_1.png" alt="Hemisphere Sampling" />
+                        <figcaption>Uniform Hemisphere Sampling (64 spp, 32 light rays)</figcaption>
+                    </td>
+                    <td>
+                        <img src="part3_2.png" alt="Importance Sampling" />
+                        <figcaption>Importance Sampling (64 spp, 32 light rays)</figcaption>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <h3>Noise Levels in Soft Shadows (Importance Sampling)</h3>
+        <div class="image-grid">
+            <table>
+                <tr>
+                    <td>
+                        <img src="Task3_l1.png" alt="1 Light Ray" />
+                        <figcaption>1 Light Ray</figcaption>
+                    </td>
+                    <td>
+                        <img src="Task3_l4.png" alt="4 Light Rays" />
+                        <figcaption>4 Light Rays</figcaption>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <img src="Task3_l16.png" alt="16 Light Rays" />
+                        <figcaption>16 Light Rays</figcaption>
+                    </td>
+                    <td>
+                        <img src="Task3_l64.png" alt="64 Light Rays" />
+                        <figcaption>64 Light Rays</figcaption>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <p>When sampling an area light with a low ray count (e.g., 1 light ray), the penumbra of the shadow shows severe noise (binary black and white dots). This is because a single sample either entirely hits the area light or is entirely occluded by the sphere. As the number of light rays increases, the Monte Carlo estimator accurately captures the fractional visibility of the area light, generating a continuous and soft shadow gradient.</p>
+
+        <h3>Uniform Hemisphere vs. Light Sampling</h3>
+        <p>Uniform hemisphere sampling is very inefficient because it blindly fires rays. Since light sources usually make up a small fraction of the solid angle above a given surface, the vast majority of uniform rays don't contribute to the direct lighting integral and create heavy noise. Importance sampling restrains the sampling domain to known light sources. Every generated ray guarantees a potential light contribution (barring occlusion), so drastically smoother images are generated in the same amount time.</p>
+
+        <h2>Part 4: Global Illumination</h2>
+        
+        <h3>Indirect Lighting Implementation</h3>
+        
+        <p>The indirect lighting function recursively evaluates the rendering equation. For each hit point, direct illumination is calculated. If the path is permitted to continue (decided by <code>max_ray_depth</code> and an unbiased Russian Roulette coin flip of $c = 0.7$) a new incoming direction is sampled from the surface's BSDF.</p>
+        
+        <div class="math-block">
+            $$ L_{indirect} = \frac{L_{incoming} \cdot f_r \cdot \cos\theta_i}{pdf \cdot c} $$
+        </div>
+
+        <p>A new ray is cast and call the function recursively in order to receive the incoming indirect radiance from the next intersection. Dividing by the continuation probability $c$ unbiases the estimator.</p>
+
+        <h3>Global Illumination Render (1024 spp)</h3>
+        <figure>
+            <div style="background-color: #fafafa; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: inline-block; width: 70%;">
+                <img src="Task4_global.png" alt="CBspheres Global Illumination" style="width: 100%;" />
+                <figcaption>CBspheres_lambertian.dae with Direct and Indirect Illumination (1024 spp)</figcaption>
+            </div>
+        </figure>
+
+        <h3>Direct vs. Indirect Illumination</h3>
+        <div class="image-grid">
+            <table>
+                <tr>
+                    <td>
+                        <img src="Task4_direct.png" alt="Direct Only" />
+                        <figcaption>Only Direct Illumination</figcaption>
+                    </td>
+                    <td>
+                        <img src="Task4_indirect.png" alt="Indirect Only" />
+                        <figcaption>Only Indirect Illumination</figcaption>
+                    </td>
+                </tr>
+            </table>
+        </div>
+		<p>The direct illumination render has harsh and pitch-black shadows with flat lighting because it only captures light traveling straight from the area light onto the surface. The indirect illumination render is dim but softly lit. It captures color bleeding (the red and blue light bouncing off the walls onto the balls) and fills in the spaces where direct light cannot reach.</p>
+        <h3>m-th Bounce of Light (Unaccumulated)</h3>
+        <div class="image-grid">
+            <table>
+                <tr>
+                    <td>
+                        <img src="Task4_unnac_0.png" alt="m=0 unaccumulated" />
+                        <figcaption>m = 0 (Zero Bounce)</figcaption>
+                    </td>
+                    <td>
+                        <img src="Task4_unnac_1.png" alt="m=1 unaccumulated" />
+                        <figcaption>m = 1 (First Bounce)</figcaption>
+                    </td>
+                    <td>
+                        <img src="Task4_unnac_2.png" alt="m=2 unaccumulated" />
+                        <figcaption>m = 2 (Second Bounce)</figcaption>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <img src="Task4_unnac_3.png" alt="m=3 unaccumulated" />
+                        <figcaption>m = 3 (Third Bounce)</figcaption>
+                    </td>
+                    <td>
+                        <img src="Task4_unnac_4.png" alt="m=4 unaccumulated" />
+                        <figcaption>m = 4 (Fourth Bounce)</figcaption>
+                    </td>
+                    <td>
+                        <img src="Task4_unnac_5.png" alt="m=5 unaccumulated" />
+                        <figcaption>m = 5 (Fifth Bounce)</figcaption>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <p>The <code>m=0</code> image shows only the emissive light source. <code>m=1</code> shows only direct lighting. The <code>m=2</code> image, the 2nd bounce, demonstrates color bleeding where light from the source hits the colored walls of the Cornell Box, bounces, and illuminates the previously pitch-black shadowy areas of the bunny. The <code>m=3</code> image,the 3rd bounce, is much dimmer but captures light that has scattered an additional time. Indirect bounces increase realism compared to standard rasterization by replacing flat shadows with physically accurate and ambient light.</p>
+
+        <h3>m-th Bounce of Light (Accumulated)</h3>
+        <div class="image-grid">
+            <table>
+                <tr>
+                    <td>
+                        <img src="Task4_acc_0.png" alt="m=0 accumulated" />
+                        <figcaption>m = 0</figcaption>
+                    </td>
+                    <td>
+                        <img src="Task4_acc_1.png" alt="m=1 accumulated" />
+                        <figcaption>m = 1</figcaption>
+                    </td>
+                    <td>
+                        <img src="Task4_acc_2.png" alt="m=2 accumulated" />
+                        <figcaption>m = 2</figcaption>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <img src="Task4_acc_3.png" alt="m=3 accumulated" />
+                        <figcaption>m = 3</figcaption>
+                    </td>
+                    <td>
+                        <img src="Task4_acc_4.png" alt="m=4 accumulated" />
+                        <figcaption>m = 4</figcaption>
+                    </td>
+                    <td>
+                        <img src="Task4_acc_5.png" alt="m=5 accumulated" />
+                        <figcaption>m = 5</figcaption>
+                    </td>
+                </tr>
+            </table>
+        </div>
+		<p>The unaccumulated images show isolated light paths of a specific length and the accumulated images show the sum of all light paths up to length <code>m</code>. <code>m=0</code> is only the light. <code>m=1</code> is direct lighting. <code>m=2</code> has soft ambient lighting. Higher values of <code>m</code> (3, 4, 5) add diminishing returns of brightness to the scene.</p>
+        <h3>Russian Roulette for Varying Depths</h3>
+        <div class="image-grid">
+            <table>
+                <tr>
+                    <td>
+                        <img src="Task4_russ0.png" alt="RR m=0" />
+                        <figcaption>max_ray_depth = 0</figcaption>
+                    </td>
+                    <td>
+                        <img src="Task4_russ1.png" alt="RR m=1" />
+                        <figcaption>max_ray_depth = 1</figcaption>
+                    </td>
+                    <td>
+                        <img src="Task4_russ2.png" alt="RR m=2" />
+                        <figcaption>max_ray_depth = 2</figcaption>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <img src="Task4_russ3.png" alt="RR m=3" />
+                        <figcaption>max_ray_depth = 3</figcaption>
+                    </td>
+                    <td>
+                        <img src="Task4_russ4.png" alt="RR m=4" />
+                        <figcaption>max_ray_depth = 4</figcaption>
+                    </td>
+                    <td>
+                        <img src="Task4_russ100.png" alt="RR m=100" />
+                        <figcaption>max_ray_depth = 100</figcaption>
+                    </td>
+                </tr>
+            </table>
+        </div>
+		<p>Russian Roulette allows rays to trace infinitely in theory, but probabilistically terminates them to save compute. For low <code>m</code> limits, the images look identical to the standard accumulated images because the maximum depth acts is a hard cap. However, at <code>m=100</code>, Russian Roulette prevents an infinite loop. The <code>m=100</code> image appears identical to <code>m=4</code> or <code>m=5</code> as light energy dissipates  after a few bounces and termination by the <code>cpdf</code> doesn't visually change the image much.</p>
+        <h3>Sample Rate Comparison</h3>
+        <div class="image-grid">
+            <table>
+                <tr>
+                    <td>
+                        <img src="Task4_s1.png" alt="1 spp" />
+                        <figcaption>1 sample per pixel</figcaption>
+                    </td>
+                    <td>
+                        <img src="Task4_s2.png" alt="2 spp" />
+                        <figcaption>2 samples per pixel</figcaption>
+                    </td>
+                    <td>
+                        <img src="Task4_s4.png" alt="4 spp" />
+                        <figcaption>4 samples per pixel</figcaption>
+                    </td>
+                    <td>
+                        <img src="Task4_s8.png" alt="8 spp" />
+                        <figcaption>8 samples per pixel</figcaption>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <img src="Task4_s16.png" alt="16 spp" />
+                        <figcaption>16 samples per pixel</figcaption>
+                    </td>
+                    <td>
+                        <img src="Task4_s64.png" alt="64 spp" />
+                        <figcaption>64 samples per pixel</figcaption>
+                    </td>
+                    <td colspan="2">
+                        <img src="Task4_s1024.png" alt="1024 spp" />
+                        <figcaption>1024 samples per pixel</figcaption>
+                    </td>
+                </tr>
+            </table>
+        </div>
+		<p>With 1 sample per pixel, the image is overwhelmed by Monte Carlo noise because a single path cannot integrate the hemisphere of incoming light. For higher rates the noise is significantly reduced, and at 1024 samples the Monte Carlo integration converges to give a smooth and photorealistic image.</p>
+        <h2>Part 5: Adaptive Sampling</h2>
+        
+        <h3>My Adaptive Sampling Implementation</h3>
+        
+        <p>Adaptive sampling dynamically allocates compute by terminating the sampling loop early for converged pixels. Regions that face light sources converge quickly, while shadows and caustics need more samples to remove variance.</p>
+        
+        <p>The algorithm keeps running sums of the pixel's illuminance ($s_1$) and squared illuminance ($s_2$). Convergence is tested iteratively in batches. During a test, the mean $\mu$ and variance $\sigma^2$ are computed:</p>
+        
+        <div class="math-block">
+            $$ \mu = \frac{s_1}{n} $$
+            $$ \sigma^2 = \frac{1}{n-1} \left( s_2 - \frac{s_1^2}{n} \right) $$
+        </div>
+
+        <p>A 95% confidence interval is evaluated with the metric $I$:</p>
+
+        <div class="math-block">
+            $$ I = 1.96 \cdot \frac{\sigma}{\sqrt{n}} $$
+        </div>
+
+        <p>If $I \le \text{maxTolerance} \cdot \mu$ then the pixel has converged. The sampling loop breaks and the average radiance is stored. The <code>sampleCountBuffer</code> is updated with the precise number of rays executed to output the rate map.</p>
+
+        <h3>Adaptive Sampling Results</h3>
+        <div class="image-grid">
+            <table>
+                <tr>
+                    <td>
+                        <img src="Task5_bunny_adaptive.png" alt="Bunny Render" />
+                        <figcaption>CBbunny Render (Max 2048 spp)</figcaption>
+                    </td>
+                    <td>
+                        <img src="Task5_bunny_rate.png" alt="Bunny Rate Map" />
+                        <figcaption>CBbunny Sample Rate Map</figcaption>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <img src="Task5_spheres_adaptive.png" alt="Spheres Render" />
+                        <figcaption>CBspheres_lambertian Render (Max 2048 spp)</figcaption>
+                    </td>
+                    <td>
+                        <img src="Task5_spheres_rate.png" alt="Spheres Rate Map" />
+                        <figcaption>CBspheres_lambertian Sample Rate Map</figcaption>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <p>For the rate maps, blue areas have low sampling rates and early convergence while red areas need higher samples. Computational effort is concentrated under shadow penumbras and near colored walls where indirect lighting variance is highest.</p>
+
+        </div>
+    </body>
 </html>
