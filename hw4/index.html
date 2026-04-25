@@ -1,109 +1,500 @@
-<html>
-	<head>
-		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=default'></script>
-		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-		<style>
-			h1 {
-				text-align: center;
-			}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CS184/284A Homework 4 Write-Up</title>
+    
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+            tex2jax: {
+                inlineMath: [['$','$']],
+                displayMath: [['$$','$$']],
+                processEscapes: true
+            }
+        });
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=default'></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --text-main: #334155;
+            --text-heading: #0f172a;
+            --accent-color: #0284c7;
+            --surface-color: #ffffff;
+            --border-color: #e2e8f0;
+            --code-bg: #f1f5f9;
+        }
 
-			.container {
-				margin: 0 auto;
-				padding: 60px 20%;
-			}
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.7;
+            margin: 0;
+            padding: 0;
+        }
 
-			figure {
-				text-align: center;
-			}
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 5%;
+        }
 
-			img {
-				display: inline-block;
-			}
+        .content-box {
+            background: var(--surface-color);
+            padding: 60px 8%;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            border: 1px solid var(--border-color);
+        }
 
-			body {
-				font-family: 'Inter', sans-serif;
-			}
-		</style>
-	</head>
-	<body>
-		<div class="container">
-		<h1>CS184/284A Spring 2025 Homework 4 Write-Up</h1>
-		<div style="text-align: center;">Names: </div>
+        h1, h2, h3, h4 {
+            color: var(--text-heading);
+            font-weight: 600;
+        }
 
-		<br>
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.025em;
+        }
 
-		Link to webpage: (TODO) <a href="https://cs184.eecs.berkeley.edu/sp25">cs184.eecs.berkeley.edu/sp25</a>
+        h2 {
+            font-size: 1.8rem;
+            margin-top: 3rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+        }
 
-		<br>
+        h3 {
+            font-size: 1.3rem;
+            margin-top: 2rem;
+            color: var(--accent-color);
+        }
 
-		Link to GitHub repository: (TODO) <a href="https://cs184.eecs.berkeley.edu/sp25">cs184.eecs.berkeley.edu/sp25</a>
+        .header-info {
+            text-align: center;
+            font-size: 1.1rem;
+            margin-bottom: 3rem;
+            color: #64748b;
+        }
 
-		<figure>
-			<img src="clothsim.png" alt="Cloth draped over sphere" style="width:70%"/>
-			<figcaption>You can add images with captions!</figcaption>
-		</figure>
+        .header-info a {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
 
-		<!--
-		We've already added one heading per part, to make your write-up as navigable when grading. Please fit your write-up within these sections!
-		-->
+        .header-info a:hover {
+            color: #0369a1;
+            text-decoration: underline;
+        }
 
-		<h2>Overview</h2>
-		Give a high-level overview of what you implemented in this homework. Think about what you've built as a whole. Share your thoughts on what interesting things you've learned from completing the homework.
+        p {
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+        }
 
-		<h2>Part 1: Masses and springs</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        code {
+            font-family: 'Fira Code', monospace;
+            background-color: var(--code-bg);
+            color: #b91c1c;
+            padding: 0.2em 0.4em;
+            border-radius: 6px;
+            font-size: 0.9em;
+        }
 
-		<p>Here is an example 2x2 gridlike structure using an HTML table. Each <b>tr</b> is a row and each <b>td</b> is a column in that row. You might find this useful for framing and showing your result images in an organized fashion.</p>
-		<div style="display: flex; flex-direction: column; align-items: center;">
-			<table style="width: 100%; text-align: center; border-collapse: collapse;">
-			  <tr>
-				<td style="text-align: center;">
-				  <img src="clothsim.png" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
-				</td>
-				<td style="text-align: center;">
-				  <img src="clothsim.png" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
-				</td>
-			  </tr>
-			  <tr>
-				<td style="text-align: center;">
-				  <img src="clothsim.png" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
-				</td>
-				<td style="text-align: center;">
-				  <img src="clothsim.png" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
-				</td>
-			  </tr>
-			</table>
-		</div>
+        /* Image Grid System */
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
 
-		<h2>Part 2: Simulation via numerical integration</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        .image-cell {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-		<h2>Part 3: Handling collisions with other objects</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        figure {
+            margin: 0;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-		<h2>Part 4: Handling self-collisions</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease;
+            border: 1px solid var(--border-color);
+        }
 
-		<h2>Part 5: Shaders</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        img:hover {
+            transform: scale(1.02);
+        }
 
-		<h2>(Optional) Part 6: Extra Credit - Additional cloth simulation features!</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-		
-		<h2>Additional Notes (please remove)</h2>
-		<ul>
-			<li>You can also add code if you'd like as so: <code>code code code</code></li>
-			<li>If you'd like to add math equations, 
-				<ul>
-					<li>You can write inline equations like so: \( a^2 + b^2 = c^2 \)</li>
-					<li>You can write display equations like so: \[ a^2 + b^2 = c^2 \]</li>
-				</ul>
-			</li>
-		</ul>
-		</div>
-	</body>
+        figcaption {
+            margin-top: 1rem;
+            font-size: 0.95rem;
+            color: #475569;
+            text-align: center;
+            max-width: 90%;
+            line-height: 1.5;
+        }
+
+        /* Math Styling */
+        .math-container {
+            background: var(--code-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        ul {
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Print Specific Styling for macOS PDF Engine (WebKit) */
+        @media print {
+            body {
+                background-color: #ffffff;
+                color: #000000;
+            }
+            .container {
+                padding: 0;
+                margin: 0;
+                max-width: 100%;
+            }
+            .content-box {
+                box-shadow: none;
+                border: none;
+                padding: 0;
+            }
+            
+            /* WebKit Print Pagination Overrides */
+            .image-grid {
+                display: block; /* Flex/Grid ignores page breaks in Mac PDF */
+                width: 100%;
+            }
+            
+            .image-cell {
+                display: inline-block;
+                width: 48%; /* Maintain side-by-side layout */
+                margin-right: 1%;
+                vertical-align: top;
+                page-break-inside: avoid;
+                break-inside: avoid;
+                margin-bottom: 2rem;
+            }
+            
+            figure {
+                display: block;
+                page-break-inside: avoid;
+                break-inside: avoid;
+                margin-bottom: 2rem;
+            }
+            
+            img {
+                box-shadow: none; 
+                page-break-inside: avoid;
+                break-inside: avoid;
+                max-height: 80vh; /* Prevent overly tall images from bypassing breaks */
+                display: block;
+            }
+
+            figcaption {
+                page-break-before: avoid;
+                break-before: avoid;
+                display: block;
+            }
+
+            h1, h2, h3, h4, .math-container {
+                page-break-inside: avoid;
+                break-inside: avoid;
+                page-break-after: avoid;
+                break-after: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="content-box">
+            <h1>CS184 Sp26 HW 4 Write-Up</h1>
+            <div class="header-info">
+                <strong>Name:</strong> Noah Math<br>
+                <strong>Webpage:</strong> <a href="https://cal-cs184-student.github.io/hw-webpages-D0ctorB">cal-cs184-student.github.io/hw-webpages-D0ctorB</a><br>
+                <strong>GitHub:</strong> <a href="https://github.com/cal-cs184-student/hw-webpages-D0ctorB">github.com/cal-cs184-student/hw-webpages-D0ctorB</a>
+            </div>
+
+            <h2>Overview</h2>
+            <p>In this project, I created a real-time physically-based cloth simulation built on a discrete mass-spring system. The architecture models the cloth as a 2D grid of interconnected <code>PointMass</code> objects governed by Newtonian mechanics. The core engine applies explicit numerical integration (Verlet integration) to advance the state of the system over discrete time steps while preserving positional constraints in order to prevent unnatural elasticity.</p>
+            
+            <p>In addition to spring dynamics, I implemented robust spatial hashing to handle $O(n)$ self-collision resolution and primitive-based collision detection for interacting with static environments. To overcome the bottleneck of rendering with a CPU, I wrote GLSL shader programs to parallelize the rendering pipeline onto the GPU. This allows real-time evaluation of the Blinn-Phong reflection model, UV texture mapping, TBN matrix transformations for bump and displacement mapping, and environment-mapped cube sampling.</p>
+
+            <h2>Part 1: Masses and Springs</h2>
+            <p>The cloth is a discrete $N_w \times N_h$ grid of point masses. The 1D underlying memory array is in row-major order, so any discrete grid coordinate $(x, y)$ is mapped to a linear index via the standard transformation:</p>
+            
+            <div class="math-container">
+                $$index = y \times N_w + x$$
+            </div>
+
+            <p>After instantiation, cloth properties are defined by springs representing structural, shearing, and bending constraints. Structural springs enforce horizontal and vertical integrity by connecting masses at $(x, y)$ to $(x \pm 1, y)$ and $(x, y \pm 1)$. Shearing springs resist diagonal deformation by connecting $(x, y)$ to $(x \pm 1, y \pm 1)$. Bending constraints prevent sharp folding by connecting masses across a step size of two: $(x \pm 2, y)$ and $(x, y \pm 2)$.</p>
+
+            <p></p>
+
+            <div class="image-grid">
+                <div class="image-cell">
+                    <img src="images/pinned2_no_shearing.png" alt="No shearing constraints"/>
+                    <figcaption><strong>No Shearing Constraints:</strong> Only structural and bending springs are active.</figcaption>
+                </div>
+                <div class="image-cell">
+                    <img src="images/pinned2_only_shearing.png" alt="Only shearing constraints"/>
+                    <figcaption><strong>Only Shearing Constraints:</strong> Only shearing constraint.</figcaption>
+                </div>
+                <div class="image-cell">
+                    <img src="images/pinned2_all_constraints.png" alt="All constraints"/>
+                    <figcaption><strong>All Constraints:</strong> No topology.</figcaption>
+                </div>
+            </div>
+
+            <h2>Part 2: Simulation via Numerical Integration</h2>
+            <p>The mass-spring system is advanced by computing the total force acting on each point mass and applying numerical integration. The total force $F_{total}$ is the sum of uniform external forces (gravity) $F_{ext} = m \cdot a_{ext}$ and the internal spring correction forces calculated using Hooke's Law:</p>
+            
+            <div class="math-container">
+                $$F_s = k_s \left(||p_a - p_b|| - l\right) \frac{p_a - p_b}{||p_a - p_b||}$$
+            </div>
+            
+            <p>where $k_s$ is the stiffness coefficient and $l$ is the resting length of the spring. Once total forces are accumulated, I utilize explicit Verlet integration to compute the new positions. Verlet integration approximates velocity based on the position differential between the current and previous timestep and grants better numerical stability than forward Euler methods. I also incorporate an explicit damping term $d$ to simulate energy dissipation (e.g., air friction and heat loss):</p>
+
+            <div class="math-container">
+                $$x_{t+dt} = x_t + (1 - d) (x_t - x_{t-dt}) + a_t dt^2$$
+            </div>
+
+            <p>To prevent chaotic behavior arising from numerical instability when springs stretch excessively in a single timestep, I applied a SIGGRAPH 1995 Provot deformation constraint, capping maximum spring deformation at $1.1 \times l$.</p>
+
+            <h3>Parameter Alterations</h3>
+
+            <div class="image-grid">
+                <div class="image-cell">
+                    <img src="images/pinned2_low_ks.png" alt="Low ks"/>
+                    <figcaption><strong>Low $k_s$ ($100$ N/m):</strong> The cloth exhibits extreme elasticity and causes elongation and deep sagging.</figcaption>
+                </div>
+                <div class="image-cell">
+                    <img src="images/pinned2_high_ks.png" alt="High ks"/>
+                    <figcaption><strong>High $k_s$ ($50000$ N/m):</strong> High stiffness penalizes deformation and the cloth has constrained folds.</figcaption>
+                </div>
+                <div class="image-cell">
+                    <img src="images/pinned2_low_density.png" alt="Low density"/>
+                    <figcaption><strong>Low Density ($5$ g/cm$^2$):</strong> Lower mass yields smaller $F_{ext}$. The spring structure supports the weight and there is slight curvature.</figcaption>
+                </div>
+                <div class="image-cell">
+                    <img src="images/pinned2_high_density.png" alt="High density"/>
+                    <figcaption><strong>High Density ($500$ g/cm$^2$):</strong> Mass dominates the spring forces and elongates the structural constraints around the pinned vertices.</figcaption>
+                </div>
+                <div class="image-cell">
+                    <img src="images/pinned2_low_damping.png" alt="Low damping"/>
+                    <figcaption><strong>Low Damping ($0.05\%$):</strong> Kinetic energy is largely conserved. There is higher-frequency ripples.</figcaption>
+                </div>
+                <div class="image-cell">
+                    <img src="images/pinned2_high_damping.png" alt="High damping"/>
+                    <figcaption><strong>High Damping ($0.8\%$):</strong> Velocity vectors are scaled down, so the cloth reaches an equilibrium state quickly without swinging.</figcaption>
+                </div>
+            </div>
+
+            <h3>Final Resting State</h3>
+            <figure>
+                <img src="images/pinned4_resting.png" alt="Pinned 4 resting" style="max-width: 70%;"/>
+                <figcaption>The default geometry of <code>pinned4.json</code> at equilibrium. The tension map resolves correctly across the four constrained vertices.</figcaption>
+            </figure>
+
+            <h2>Part 3: Handling Collisions with Other Objects</h2>
+            
+            <h3>Sphere Collisions</h3>
+            <p>Collision detection against the spherical primitive evaluates the implicit equation of the sphere. If the Euclidean distance $||p - c|| \le r$, a collision occurs. The point is projected to the tangent surface by extending the normalized direction vector:</p>
+            
+            <div class="math-container">
+                $$p_{tangent} = c + r \frac{p - c}{||p - c||}$$
+            </div>
+            
+            <p>The corrective displacement vector is scaled by the friction coefficient $(1 - f)$ to prevent infinite sliding.</p>
+
+            <p></p>
+
+            <h3>Plane Collisions</h3>
+            <p>Plane collision assumes an infinite boundary surface and evaluates if a particle traversed the boundary during timestep $dt$. I compute the dot product of the surface normal $n$ against both the previous and current position vectors relative to a point on the plane. A sign change indicates intersection. The point is then pushed out along the normal vector, offset by a minor epsilon to prevent floating-point Z-fighting.</p>
+
+            <h3>Collisions Under Variable Stiffness</h3>
+            <div class="image-grid">
+                <div class="image-cell">
+                    <img src="images/sphere_ks_500.png" alt="Sphere ks 500"/>
+                    <figcaption><strong>$k_s = 500$:</strong> The weak internal structure allows the cloth to drape closely over the implicit surface geometry of the sphere.</figcaption>
+                </div>
+                <div class="image-cell">
+                    <img src="images/sphere_ks_5000.png" alt="Sphere ks 5000"/>
+                    <figcaption><strong>$k_s = 5000$ (Default):</strong> Cloth drapes farther from the sphere geometry.</figcaption>
+                </div>
+                <div class="image-cell">
+                    <img src="images/sphere_ks_50000.png" alt="Sphere ks 50000"/>
+                    <figcaption><strong>$k_s = 50000$:</strong> Cloth resists the contour of the sphere.</figcaption>
+                </div>
+            </div>
+
+            <figure>
+                <img src="images/plane_resting.png" alt="Plane resting" style="max-width: 70%;"/>
+                <figcaption>Collision resolution against the plane primitive.</figcaption>
+            </figure>
+
+            <h2>Part 4: Handling Self-Collisions</h2>
+            <p>Naive self-collision checks require pairwise comparisons for all points, yielding $O(n^2)$ computational complexity which is intractable for real-time simulation. To resolve this, I use a spatial hashing structure mapping $3D$ coordinate space to discrete volumetric bins.</p>
+            
+            <p></p>
+
+            <p>The dimensions of the bounding boxes $(w, h, t)$ are statically derived from the mesh density. Points are assigned a unique hash $H(x, y, z)$. During the simulation step, point masses only evaluate repulsive distance constraints $||p_a - p_b|| < 2 \times \text{thickness}$ against candidates within the exact same spatial hash bucket, accelerating the intersection evaluation to $O(n)$. The resulting repulsive vectors are averaged and applied directly to the position array.</p>
+
+            <h3>Folding Progression</h3>
+            <div class="image-grid">
+                <div class="image-cell">
+                    <img src="images/self_collision_early.png" alt="Early collision"/>
+                    <figcaption><strong>1. Initial Contact:</strong> The spatial hash identifies collisions at the base, triggering upward repulsive corrections.</figcaption>
+                </div>
+                <div class="image-cell">
+                    <img src="images/self_collision_mid.png" alt="Mid collision"/>
+                    <figcaption><strong>2. Accumulation:</strong> Folds stack recursively and repulsive forces prevent intersecting geometry.</figcaption>
+                </div>
+                <div class="image-cell">
+                    <img src="images/self_collision_rest.png" alt="Rest state"/>
+                    <figcaption><strong>3. Equilibrium:</strong> The solver successfully separates the layered topology in its rested state.</figcaption>
+                </div>
+            </div>
+
+            <h3>Behavioral Dynamics: Density & Spring Tension</h3>
+            <div class="image-grid">
+                <div class="image-cell">
+                    <img src="images/self_collision_low_density.png" alt="Low density self collision"/>
+                    <figcaption><strong>Low Density:</strong> Low momentum at impact allows the internal structural springs to make wide folds.</figcaption>
+                </div>
+                <div class="image-cell">
+                    <img src="images/self_collision_high_density.png" alt="High density self collision"/>
+                    <figcaption><strong>High Density:</strong> Kinetic energy overpowers the spring constraints and creates a chaotic folding structure.</figcaption>
+                </div>
+                <div class="image-cell">
+                    <img src="images/self_collision_low_ks.png" alt="Low ks self collision"/>
+                    <figcaption><strong>Low $k_s$:</strong> The lack of rigidity forces the system to collapse into a fluid-like spread with high-frequency micro-folds.</figcaption>
+                </div>
+                <div class="image-cell">
+                    <img src="images/self_collision_high_ks.png" alt="High ks self collision"/>
+                    <figcaption><strong>High $k_s$:</strong> High tension forces the material to repel itself in large creases.</figcaption>
+                </div>
+            </div>
+
+            <h2>Part 5: Shaders</h2>
+            <p>To overcome the CPU rendering bottleneck, I created customized GLSL programs (Vertex and Fragment shaders) executed via OpenGL. The Vertex Shader runs per-vertex and computes necessary coordinate transformations (e.g., model-to-screen space via projection matrices) and passing linearly interpolated data (normals, UV coordinates, tangents) to the next pipeline stage. The Fragment Shader processes fragments post-rasterization and applies mathematical lighting models and sampling texture arrays to make the final pixel output.</p>
+
+            <p></p>
+
+            <h3>Blinn-Phong Shading Model</h3>
+            <p>The Blinn-Phong shading model is a reflection model that approximates the behavior of light without the massive computational overhead of explicit ray-tracing. It computes final illumination $L$ as a linear combination of ambient, diffuse, and specular components:</p>
+
+            <div class="math-container">
+                $$L = k_a I_a + k_d \frac{I}{r^2} \max(0, n \cdot l) + k_s \frac{I}{r^2} \max(0, n \cdot h)^p$$
+            </div>
+
+            <p>Where $n$ is the surface normal, $l$ is the illumination vector, and $h$ is the half-vector bisecting the viewer and light source, calculated as $h = \frac{v + l}{||v + l||}$.</p>
+
+            <p></p>
+
+            <div class="image-grid">
+                <div class="image-cell">
+                    <img src="images/phong_ambient.png" alt="Phong Ambient"/>
+                    <figcaption><strong>Ambient Only:</strong> $k_a I_a$. Approximates indirect environmental scattering.</figcaption>
+                </div>
+                <div class="image-cell">
+                    <img src="images/phong_diffuse.png" alt="Phong Diffuse"/>
+                    <figcaption><strong>Diffuse Only:</strong> Lambertian reflection $\max(0, n \cdot l)$, simulating matte light dispersion irrespective of viewing angle.</figcaption>
+                </div>
+                <div class="image-cell">
+                    <img src="images/phong_specular.png" alt="Phong Specular"/>
+                    <figcaption><strong>Specular Only:</strong> Calculates localized highlight glints relying on the $\max(0, n \cdot h)^p$ exponent to control highlight sharpness.</figcaption>
+                </div>
+                <div class="image-cell">
+                    <img src="images/phong_complete.png" alt="Phong Complete"/>
+                    <figcaption><strong>Complete Blinn-Phong:</strong> The algebraic addition of all three light calculations output to the fragment color.</figcaption>
+                </div>
+            </div>
+
+            <h3>Texture Mapping</h3>
+            <figure>
+                <img src="images/texture_custom.png" alt="Custom texture" style="max-width: 50%;"/>
+                <figcaption>Sampling an external rasterized texture by passing interpolated 2D UV coordinate varyings to the <code>texture()</code> function within the fragment shader. This is a fractal cloth!</figcaption>
+            </figure>
+
+            <h3>Bump & Displacement Mapping</h3>
+            <p>These techniques utilize a scalar height map $h(u,v)$ to perturb geometry, mapped via the Tangent-Bitangent-Normal ($\mathbf{TBN}$) transformation matrix which converts local tangent space vectors into model space: $\mathbf{TBN} = [t \quad b \quad n]$.</p>
+            
+            <p><strong>Bump mapping</strong> computes a local space normal $n_o = (-dU, -dV, 1)$ based on height differentials, transforming it via $n_d = \mathbf{TBN} n_o$. This creates a purely optical illusion of surface depth by altering fragment normals and the actual vertex geometry is unchanged.</p>
+
+            <p><strong>Displacement mapping</strong> computes the same lighting adjustments but perturbs the physical geometry in the vertex shader: $p' = p + n \cdot h(u,v) \cdot k_h$, only changing the object's silhouette boundaries.</p>
+
+            <figure>
+                <img src="images/bump_cloth.png" alt="Bump on cloth" style="max-width: 60%;"/>
+                <figcaption>Bump mapping alters the cloth's light interaction based on surface gradients.</figcaption>
+            </figure>
+
+            <div class="image-grid">
+                <div class="image-cell">
+                    <img src="images/bump_sphere_16.png" alt="Bump coarse"/>
+                    <figcaption><strong>Bump (-o 16 -a 16):</strong> High-frequency visual detail is preserved regardless of low vertex density.</figcaption>
+                </div>
+                <div class="image-cell">
+                    <img src="images/displacement_sphere_16.png" alt="Displacement coarse"/>
+                    <figcaption><strong>Displacement (-o 16 -a 16):</strong> Blocky, since the underlying geometry lacks the resolution to map the high-frequency displacement.</figcaption>
+                </div>
+                <div class="image-cell">
+                    <img src="images/bump_sphere_128.png" alt="Bump fine"/>
+                    <figcaption><strong>Bump (-o 128 -a 128):</strong> Visually identical to the coarse iteration due to the mathematical constraints of fragment manipulation.</figcaption>
+                </div>
+                <div class="image-cell">
+                    <img src="images/displacement_sphere_128.png" alt="Displacement fine"/>
+                    <figcaption><strong>Displacement (-o 128 -a 128):</strong> Remains blocky but represents distortion.</figcaption>
+                </div>
+            </div>
+
+            <h3>Environment-Mapped Reflections</h3>
+            <p>The Mirror shader bypasses explicit path-tracing by sampling a pre-computed environment cubemap. It casts an eye-ray $w_o$ to the fragment position and computes its reflection vector $w_i$ across the surface normal. I query the cubemap texture along $w_i$ to simulate a perfect specular surface.</p>
+
+            <div class="image-grid">
+                <div class="image-cell">
+                    <img src="images/mirror_cloth.png" alt="Mirror cloth"/>
+                    <figcaption>Environment-mapped reflection projecting 360-degree bridge scene onto the cloth topology.</figcaption>
+                </div>
+                <div class="image-cell">
+                    <img src="images/mirror_sphere.png" alt="Mirror sphere"/>
+                    <figcaption>Environment-mapped reflection of the same scene, evaluating the spherical surface geometry.</figcaption>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</body>
 </html>
